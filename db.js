@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Define the MongoDB connection URL
-const mongoURL = process.env.mongoURL_local;
-
+// const mongoURL = process.env.mongoURL_local;
+const mongoURL= process.env.DB_URL ;
 // Setup MongoDB connection
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000, // Timeout after 10 seconds
+    socketTimeoutMS: 45000 // Increase socket timeout to 45 seconds
 });
 
 // Get the default connection

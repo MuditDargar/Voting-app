@@ -1,24 +1,32 @@
-const express=require('express')
-const app=express()
-const db=require('./db')
- require('dotenv').config()
+const express = require('express');
+const app = express();
+const db = require('./db');
+require('dotenv').config();
 
-const bodyParser=require('body-parser');
-app.use(bodyParser.json()) ; //req body
+const bodyParser = require('body-parser');
+const cors = require('cors'); // Import cors
 
-const port = process.env.port || 3000 ;
+// Middleware to handle CORS
+app.use(cors({
+    origin: 'http://localhost:3001', // Replace with your frontend URL if different
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
 
-const {jwtAuthMiddleware}= require('./jwt');
+app.use(bodyParser.json()); // Middleware to parse JSON request bodies
 
+const port = process.env.PORT || 3000; // Ensure process.env.PORT is used correctly
+
+const { jwtAuthMiddleware } = require('./jwt');
 
 // Import the routes files
-const userRoutes=require('./routes/userRoutes');
-const candidateRoutes=require('./routes/candidateRoutes');
+const userRoutes = require('./routes/userRoutes');
+const candidateRoutes = require('./routes/candidateRoutes');
 
-//use the routers
-app.use('/user',userRoutes);
-app.use('/candidate',candidateRoutes);
+// Use the routers
+app.use('/user', userRoutes);
+app.use('/candidate', candidateRoutes);
 
 app.listen(port, () => {
-        console.log(`listening on port 3000`)
-    })
+    console.log(`Server listening on port ${port}`);
+});
